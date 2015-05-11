@@ -54,6 +54,11 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".StopCountDownTimer"
+            android:label="@string/title_activity_stop_count_down_timer" >
+        </activity>
     </application>
 
 </manifest>

@@ -7,6 +7,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 /**
  * Created by okan on 4/8/2015.
  */
@@ -14,6 +17,14 @@ public class Splash extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Parse.enableLocalDatastore(this);
+
+        Parse.initialize(this, "75jJmACA0Zbg83q3Rfm3kSsz4ymlwH2YzqoWUnWi", "HN8ZUpBI68fmDRDYCtZuK2WrPhnpTSl50pcCqRet");
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         final ImageView iv = (ImageView)findViewById(R.id.loadingcircle);

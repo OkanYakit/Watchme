@@ -8,6 +8,7 @@ import android.telephony.SmsManager;
  * Created by okan on 5/7/2015.
  */
 public class MyCountDownTime extends CountDownTimer {
+
     boolean firstTime = true;
 
 
@@ -52,6 +53,7 @@ public class MyCountDownTime extends CountDownTimer {
     public void onPause(){
 
     }
+    
 
 
 }
