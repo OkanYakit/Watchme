@@ -87,7 +87,13 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 
                 if(parseObjects!=null){
                     Log.d("parse.com",""+parseObjects.size());
-                    showMessage("Welcome "+parseObjects.get(0).get("name"));
+                    if(parseObjects!=null&&parseObjects.size()>0){
+                        showMessage("Welcome "+parseObjects.get(0).get("name"));
+                        loguserIn(user);
+                    }else{
+                        showMessage("Please enter a valid user");
+                    }
+
                 }else{
                     Log.d("parse.com","Houston 5");
                 }
