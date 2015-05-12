@@ -110,6 +110,7 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 //                }
 //            }
 //        });
+        startActivity(new Intent(this,slidemenu.class));
     }
 
 

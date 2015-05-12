@@ -29,7 +29,7 @@ public class StopCountDownTimer extends ActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        startService(new Intent(StopCountDownTimer.this, MyAlarmService.class).setAction())
+
                     }
                 });
             }

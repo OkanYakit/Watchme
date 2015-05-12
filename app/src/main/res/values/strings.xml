@@ -6,7 +6,7 @@
     <string name="loading">loadingcircle</string>
     <string name="title_activity_loginscreen">loginscreen</string>
     <string name="title_activity_registerscreen">registerscreen</string>
-    <string name="title_activity_slidemenu">slidemenu</string>
+    <string name="title_activity_slidemenu"></string>
 
     <string name="title_section1">Main screen</string>
     <string name="title_section2">Profile</string>
@@ -16,6 +16,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
+    <string name="action_example">Watchme</string>
     <string name="title_activity_stop_count_down_timer">StopCountDownTimer</string>
 </resources>

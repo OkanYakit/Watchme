@@ -42,9 +42,10 @@
         android:layout_height="wrap_content"
         android:text="Set Alarm"
         android:id="@+id/btnSetNotif"
+        android:layout_marginTop="44dp"
         android:layout_below="@+id/etPhoneNumber"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="73dp" />
+        android:layout_alignRight="@+id/etPhoneNumber"
+        android:layout_alignEnd="@+id/etPhoneNumber" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -65,5 +66,15 @@
         android:layout_alignLeft="@+id/etMessage"
         android:layout_alignStart="@+id/etMessage"
         android:hint="Enter the reciver number" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel Alarm"
+        android:id="@+id/cancelAlarm"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/btnSetNotif"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
 
 </RelativeLayout>
