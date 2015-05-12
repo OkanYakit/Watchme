@@ -2,6 +2,7 @@ package com.okanyakit.watchme;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,11 +55,35 @@ public class alarmsettings extends android.support.v4.app.Fragment {
 //                calendar.set(Calendar.AM_PM, 0);
 
                 Intent myIntent = new Intent(getActivity(), MyReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
+                PendingIntent alarmIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
 
-                AlarmManager alarmManager = (AlarmManager)getActivity(). getSystemService(ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+                MyApplication.alarmManager = (AlarmManager)getActivity(). getSystemService(ALARM_SERVICE);
+                MyApplication.alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), alarmIntent);
 
+                // setRepeating() lets you specify a precise custom interval--in this case,
+                // 20 minutes.
+                MyApplication.alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        1000 * 10 * 1, alarmIntent);
+
+                MyApplication.setAlarmIntent(alarmIntent);
+                Context context = MyApplication.getAppContext();
+
+
+
+//                AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//                Intent intent = new Intent(context, BroadcastReceiver.class);
+//                alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//
+//                // Set the alarm to start at 8:30 a.m.
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTimeInMillis(System.currentTimeMillis());
+//                calendar.set(Calendar.HOUR_OF_DAY, 24);
+//                calendar.set(Calendar.MINUTE, 18);
+//
+//                // setRepeating() lets you specify a precise custom interval--in this case,
+//                // 20 minutes.
+//                alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                        1000 * 30 * 1, alarmIntent); //30 saniyede 1
 
             }
         });

@@ -1,5 +1,6 @@
 package com.okanyakit.watchme;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,21 +9,24 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.SmsManager;
+import android.util.Log;
 
-public class MyAlarmService extends Service {
+public class MyAlarmService extends IntentService {
 //    static MyCountDownTime myCountDownTimer= new MyCountDownTime(60000, 20000);
     public static Handler handler = new Handler();
 
-    public MyAlarmService() {
-    }
+    private int i=0;
+
     private NotificationManager mManager;
 
-    @Override
-    public IBinder onBind(Intent arg0)
-    {
-        // TODO Auto-generated method stub
-        return null;
+    public MyAlarmService(String name) {
+        super(name);
     }
+
+    public MyAlarmService(){
+        super("");
+    }
+
 
     @Override
     public void onCreate()
@@ -65,7 +69,12 @@ public class MyAlarmService extends Service {
         super.onDestroy();
     }
 
-   static Runnable runnable = new Runnable() {
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        Log.d("Nurettin","Mesaj"+i++);
+    }
+
+    static Runnable runnable = new Runnable() {
         @Override
         public void run() {
       /* do what you need to do */
@@ -89,7 +98,9 @@ public class MyAlarmService extends Service {
     }
 
     static public void stopRunnable (){
-        handler.removeCallbacks(runnable);
+        Log.d("Nurettin","stopping runnable");
+       handler.removeCallbacks(runnable);
+       handler.removeCallbacksAndMessages(null);
     }
 
 

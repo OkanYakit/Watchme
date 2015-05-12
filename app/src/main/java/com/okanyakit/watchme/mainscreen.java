@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import scheduler.Scheduler;
+
 /**
  * Created by okan on 4/23/2015.
  */
@@ -52,6 +54,8 @@ public class mainscreen extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 GPSTracker gps = new GPSTracker(getActivity());
 
+                //Nurettin
+                Scheduler.cancelAlarm(getView());
 
                 if (gps.canGetLocation()){
                     String slatitude;

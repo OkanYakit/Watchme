@@ -122,16 +122,18 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public String getstreetAddress(){
-        //address = addresses.get(0).getAddressLine(0);
-        city = addresses.get(0).getLocality();
-        //state = addresses.get(0).getAdminArea();
-        country = addresses.get(0).getCountryName();
-        // postalCode = addresses.get(0).getPostalCode();
-        // knownName = addresses.get(0).getFeatureName();
-        streetAddress =" "+ address+", "+city+", "+country;//+", "+state+", "+postalCode+", "+knownName;
+
+        if(addresses!=null){
+            //address = addresses.get(0).getAddressLine(0);
+            city = addresses.get(0).getLocality();
+            //state = addresses.get(0).getAdminArea();
+            country = addresses.get(0).getCountryName();
+            // postalCode = addresses.get(0).getPostalCode();
+            // knownName = addresses.get(0).getFeatureName();
+            streetAddress =" "+ address+", "+city+", "+country;//+", "+state+", "+postalCode+", "+knownName;
+        }
 
         return streetAddress;
-
     }
     public double getLatitude(){
         if(location != null){

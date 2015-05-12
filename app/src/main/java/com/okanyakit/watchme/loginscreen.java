@@ -1,6 +1,9 @@
 package com.okanyakit.watchme;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -22,6 +26,9 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+import scheduler.AlarmReceiver;
+import scheduler.Scheduler;
+
 
 public class loginscreen extends ActionBarActivity implements View.OnClickListener {
 
@@ -29,7 +36,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
     EditText logusername, logpassword;
     TextView registerheretv;
     UserLocalStore userLocalStore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +163,21 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         NavigationDrawerFragment mNavigationDrawerFragment = new NavigationDrawerFragment();
         startActivity(new Intent(this,slidemenu.class));
 
+        startAlarm(findViewById(R.id.textView3));
+
+    }
+
+    public void startAlarm(View view) {
+
+        // Retrieve a PendingIntent that will perform a broadcast
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        Scheduler.pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+
+        Scheduler.manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        int interval = 10000;
+
+        Scheduler.manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, Scheduler.pendingIntent);
+        Log.d("Nurettin","Alarm Set! 10 seconds");
     }
 
 }
