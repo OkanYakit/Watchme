@@ -74,7 +74,7 @@ public class MyAlarmService extends Service {
         public void run() {
       /* do what you need to do */
 
-            sendmessage();
+//            sendmessage();
       /* and here comes the "trick" */
             handler.postDelayed(this, 10000);
         }
@@ -82,15 +82,7 @@ public class MyAlarmService extends Service {
 
 
 
-    static private void sendmessage() {
 
-
-        String prewrittenmessage ="Test message2";
-        String phone = "0702901539";
-        Intent sendtoemail = new Intent(Intent.ACTION_SEND);
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
-    }
 
     static public void stopRunnable (){
         handler.removeCallbacks(runnable);
