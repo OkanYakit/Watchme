@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.View;
 public class MyAlarmService extends Service {
 //    static MyCountDownTime myCountDownTimer= new MyCountDownTime(60000, 20000);
     public static Handler handler = new Handler();
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
     public MyAlarmService() {
     }
@@ -41,17 +43,18 @@ public class MyAlarmService extends Service {
     {
         super.onStart(intent, startId);
 
-        mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
-        Intent intent1 = new Intent(this.getApplicationContext(),alarmsettings.class);
 
-        Notification notification = new Notification(R.mipmap.ic_launcher,"This is a test message!", System.currentTimeMillis());
-        intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity( this.getApplicationContext(),0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notification.setLatestEventInfo(this.getApplicationContext(), "AlarmManagerDemo", "This is a test message!", pendingNotificationIntent);
-
-        mManager.notify(0, notification);
+//        mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
+//        Intent intent1 = new Intent(this.getApplicationContext(),alarmsettings.class);
+//
+//        Notification notification = new Notification(R.mipmap.ic_launcher,"This is a test message!", System.currentTimeMillis());
+//        intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//        PendingIntent pendingNotificationIntent = PendingIntent.getActivity( this.getApplicationContext(),0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
+//        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+//        notification.setLatestEventInfo(this.getApplicationContext(), "AlarmManagerDemo", "This is a test message!", pendingNotificationIntent);
+//
+//        mManager.notify(1, notification);
 
         //myCountDownTimer.start();
 
@@ -74,7 +77,7 @@ public class MyAlarmService extends Service {
         public void run() {
       /* do what you need to do */
 
-//            sendmessage();
+            sendmessage();
       /* and here comes the "trick" */
             handler.postDelayed(this, 10000);
         }
@@ -82,7 +85,15 @@ public class MyAlarmService extends Service {
 
 
 
+    static private void sendmessage() {
 
+
+        String prewrittenmessage ="Test message2";
+        String phone = "0702901539";
+        Intent sendtoemail = new Intent(Intent.ACTION_SEND);
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
+    }
 
     static public void stopRunnable (){
         handler.removeCallbacks(runnable);
