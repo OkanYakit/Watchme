@@ -1,7 +1,9 @@
 package com.okanyakit.watchme;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +16,7 @@ import com.parse.ParseObject;
  * Created by okan on 4/8/2015.
  */
 public class Splash extends Activity {
+    Boolean log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class Splash extends Activity {
         final ImageView iv = (ImageView)findViewById(R.id.loadingcircle);
         final Animation an =  AnimationUtils.loadAnimation(getBaseContext(), R.anim.rotate);
         final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
+        SharedPreferences mySharedPrefecences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        log = mySharedPrefecences.getBoolean("UserLoggedIn", false);
 
         iv.startAnimation(an);
         an.setAnimationListener(new Animation.AnimationListener() {
@@ -41,9 +46,17 @@ public class Splash extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 iv.startAnimation(an2);
+
                 finish();
-                Intent i = new Intent(getBaseContext(),loginscreen.class);
-                startActivity(i);
+                if (log){
+                    Intent x = new Intent(getBaseContext(),slidemenu.class);
+                    startActivity(x);
+                }else {
+                    Intent i = new Intent(getBaseContext(),loginscreen.class);
+                    startActivity(i);
+                }
+
+
 
             }
 

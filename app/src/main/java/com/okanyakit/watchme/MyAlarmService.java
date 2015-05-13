@@ -86,6 +86,7 @@ public class MyAlarmService extends Service {
 
     }
 
+
     @Override
     public void onDestroy()
     {
@@ -93,32 +94,24 @@ public class MyAlarmService extends Service {
         super.onDestroy();
     }
 
-   static Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-      /* do what you need to do */
-
-            sendmessage();
-      /* and here comes the "trick" */
-            handler.postDelayed(this, 10000);
-        }
-    };
-
-
-
-    static private void sendmessage() {
+//   static Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//      /* do what you need to do */
+//
+//            sendmessage();
+//      /* and here comes the "trick" */
+//            handler.postDelayed(this, 10000);
+//        }
+//    };
 
 
-        String prewrittenmessage ="Test message2";
-        String phone = "0702901539";
-        Intent sendtoemail = new Intent(Intent.ACTION_SEND);
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
-    }
 
-    static public void stopRunnable (){
-        handler.removeCallbacks(runnable);
-    }
+
+
+//    static public void stopRunnable (){
+//        handler.removeCallbacks(runnable);
+//    }
 
 
 

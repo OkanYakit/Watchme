@@ -1,7 +1,9 @@
 package com.okanyakit.watchme;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -135,12 +137,17 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 //                }
 //            }
 //        });
+        userIsLogged();
         startActivity(new Intent(this,slidemenu.class));
 
     }
 
-
-
+    private void userIsLogged() {
+        SharedPreferences mySharedPrefecences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myeditor = mySharedPrefecences.edit();
+        myeditor.putBoolean("UserLoggedIn",true);
+        myeditor.commit();
+    }
 
 
     public void authenticate (User user){
