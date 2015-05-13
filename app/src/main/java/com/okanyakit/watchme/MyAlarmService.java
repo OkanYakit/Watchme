@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -17,7 +18,8 @@ import android.view.View;
 public class MyAlarmService extends Service {
 //    static MyCountDownTime myCountDownTimer= new MyCountDownTime(60000, 20000);
     public static Handler handler = new Handler();
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+    NotificationCompat.Builder mBuilder;
+    public static final int NOTIFICATION_ID = 4567;
 
     public MyAlarmService() {
     }
@@ -33,6 +35,7 @@ public class MyAlarmService extends Service {
     @Override
     public void onCreate()
     {
+
         // TODO Auto-generated method stub
         super.onCreate();
     }
@@ -42,6 +45,24 @@ public class MyAlarmService extends Service {
     public void onStart(Intent intent, int startId)
     {
         super.onStart(intent, startId);
+        Intent intent1 = new Intent(this.getApplication(),alarmsettings.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this.getApplication(),0,intent1,PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setAutoCancel(true);
+
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        mBuilder.setTicker("This is the ticker");
+        mBuilder.setWhen(System.currentTimeMillis());
+        mBuilder.setContentTitle("Watch me");
+        mBuilder.setContentText("Are you ok ?");
+        mBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(this,RingtoneManager.TYPE_NOTIFICATION));
+        mBuilder.setContentIntent(pendingIntent);
+
+        NotificationManager nManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        nManager.notify(NOTIFICATION_ID,mBuilder.build());
+
+
+
 
 
 //        mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);

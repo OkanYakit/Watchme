@@ -75,7 +75,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("name", logusername.getText().toString());
-
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
@@ -84,15 +83,41 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
                 } else {
                     Log.d("parse.com", "Error: " + e.getMessage());
                 }
+                if (parseObjects != null) {
+                    Log.d("parse.com", "" + parseObjects.size());
+                    if (parseObjects.get(0).get("name")== logusername.getText().toString())
+                    {
+                        if (parseObjects.get(1).get("password")==logpassword.getText().toString())
+                        {
+                            showMessage("Welcome " + parseObjects.get(0).get("name"));
 
-                if(parseObjects!=null){
-                    Log.d("parse.com",""+parseObjects.size());
-                    showMessage("Welcome "+parseObjects.get(0).get("name"));
-                }else{
-                    Log.d("parse.com","Houston 5");
+                        }
+                    }
+
+                } else {
+                    showErrorMessage();
+
                 }
             }
         });
+
+
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
+//                if (e == null) {
+//                    Log.d("parse.com", "Retrieved " + parseObjects.size() + " scores");
+//                } else {
+//                    Log.d("parse.com", "Error: " + e.getMessage());
+//                }
+//                if(parseObjects!=null){
+//                    Log.d("parse.com",""+parseObjects.size());
+//                    showMessage("Welcome "+parseObjects.get(0).get("name"));
+//                }else{
+//                    showMessage("Please check the user name");
+//                }
+//            }
+//        });
 
 
 //        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("User");
@@ -111,6 +136,7 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 //            }
 //        });
         startActivity(new Intent(this,slidemenu.class));
+
     }
 
 

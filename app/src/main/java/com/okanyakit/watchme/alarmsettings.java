@@ -29,6 +29,7 @@ public class alarmsettings extends android.support.v4.app.Fragment {
     final  Calendar calendar = Calendar.getInstance();
     int iHour, iMinute;
     boolean alarmCreated = false;
+    Scheduler scheduler = new Scheduler();
 
     @Nullable
     @Override
@@ -122,12 +123,12 @@ public class alarmsettings extends android.support.v4.app.Fragment {
 
         // Retrieve a PendingIntent that will perform a broadcast
         Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
-        Scheduler.pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
+        scheduler.pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
-        Scheduler.manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
+        scheduler.manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        int interval = 60000;
 
-        Scheduler.manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, Scheduler.pendingIntent);
+        scheduler.manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, Scheduler.pendingIntent);
         Log.d("Nurettin", "Alarm Set! 10 seconds");
     }
 

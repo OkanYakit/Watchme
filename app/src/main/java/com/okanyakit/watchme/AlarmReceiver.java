@@ -12,12 +12,12 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
+        sendmessage();
     }
     static private void sendmessage() {
 
 
-        String prewrittenmessage ="Test message2";
+        String prewrittenmessage ="Test message3";
         String phone = "0702901539";
         Intent sendtoemail = new Intent(Intent.ACTION_SEND);
         SmsManager smsManager = SmsManager.getDefault();
