@@ -29,7 +29,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class alarmsettings extends android.support.v4.app.Fragment {
     View rootview;
     Button setalarm, cancelalarm;
-    EditText hour,minute,message,phonenumber;
+    EditText hour,minute;
     final  Calendar calendar = Calendar.getInstance();
     int iHour, iMinute;
     boolean alarmCreated = false;
@@ -53,15 +53,18 @@ public class alarmsettings extends android.support.v4.app.Fragment {
         hour = (EditText)rootview.findViewById(R.id.etHour);
         minute = (EditText)rootview.findViewById(R.id.etMinute);
         setalarm = (Button)rootview.findViewById(R.id.btnSetNotif);
-        message = (EditText)rootview.findViewById(R.id.etMessage);
-        phonenumber=(EditText)rootview.findViewById(R.id.etPhoneNumber);
         cancelalarm = (Button)rootview.findViewById(R.id.cancelAlarm);
 
         cancelalarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (alarmCreated){
+                    SharedPreferences alarmpreferences = getActivity().getSharedPreferences("Message", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor alarmeditor= alarmpreferences.edit();
                     alarmCreated = false;
+                    alarmeditor.putBoolean("alarmCreated",alarmCreated);
+                    alarmeditor.commit();
+
                 }else
                 {
                     Toast.makeText(getActivity(),"You haven't defined and alarm".toString(),Toast.LENGTH_LONG).show();
@@ -76,27 +79,32 @@ public class alarmsettings extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 boolean validationError = false;
+                SharedPreferences messagepreferences = getActivity().getSharedPreferences("Message", Context.MODE_PRIVATE);
+                smessage = messagepreferences.getString("Message",null);
+                sphonenumber = messagepreferences.getString("PhoneNumber",null);
+                if (smessage==null||sphonenumber==null)
+                {
+                    Toast.makeText(getActivity(), "please define a message/phone number in message and contacts section", Toast.LENGTH_LONG).show();
+                }else {
 
-                StringBuilder validationErrorMessage = new StringBuilder("Please ");
-                if (isEmpty(hour))
-                {
-                    validationError = true;
-                    validationErrorMessage.append("enter a hour ");
-                }
-                if (isEmpty(minute))
-                {
-                    if (validationError){
-                        validationErrorMessage.append("and ");
+                    StringBuilder validationErrorMessage = new StringBuilder("Please ");
+                    if (isEmpty(hour)) {
+                        validationError = true;
+                        validationErrorMessage.append("enter a hour ");
                     }
-                    validationError = true;
-                    validationErrorMessage.append("enter a minute ");
+                    if (isEmpty(minute)) {
+                        if (validationError) {
+                            validationErrorMessage.append("and ");
+                        }
+                        validationError = true;
+                        validationErrorMessage.append("enter a minute ");
+                    }
+                    validationErrorMessage.append(".");
+                    if (validationError) {
+                        Toast.makeText(getActivity(), validationErrorMessage.toString(), Toast.LENGTH_LONG).show();
+                        return;
+                    }
                 }
-                validationErrorMessage.append(".");
-                if (validationError){
-                    Toast.makeText(getActivity(),validationErrorMessage.toString(),Toast.LENGTH_LONG).show();
-                    return;
-                }
-
                 iHour = Integer.parseInt(hour.getText().toString());
                 iMinute = Integer.parseInt(minute.getText().toString());
 
@@ -115,66 +123,20 @@ public class alarmsettings extends android.support.v4.app.Fragment {
 
                 AlarmManager alarmManager = (AlarmManager)getActivity(). getSystemService(ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+                SharedPreferences alarmpreferences = getActivity().getSharedPreferences("Message", Context.MODE_PRIVATE);
+                SharedPreferences.Editor alarmeditor= alarmpreferences.edit();
                 alarmCreated = true;
+                alarmeditor.putBoolean("alarmCreated",alarmCreated);
 
 //                startAlarm(getView());
-                final Timer waitingTimer = new Timer();
-                waitingTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (alarmCreated == false){
-                            waitingTimer.cancel();
-                        }else {
-                            sendmessage();
-                        }
 
-
-                    }
-                }, 60000, 180000);
 
 
             }
         });
         return rootview;
     }
-      private void sendmessage() {
-        GPSTracker gps = new GPSTracker(getActivity());
-          SharedPreferences messagepreferences = this.getActivity().getSharedPreferences("Message", Context.MODE_PRIVATE);
-          smessage = messagepreferences.getString("Message",null);
-          sphonenumber = messagepreferences.getString("PhoneNumber",null);
 
-          if (smessage==null||sphonenumber==null)
-          {
-              Toast.makeText(getActivity(),"please define a message/phone number in message and contacts section",Toast.LENGTH_LONG).show();
-          }else {
-
-        if (gps.canGetLocation()){
-            String slatitude;
-            String slongitude;
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-            String streetAddress = gps.getstreetAddress();
-
-            slongitude = Double.toString(longitude);
-            slatitude = Double.toString(latitude);
-            String coordinates = " "+slatitude+" , "+slongitude+" ";
-             myadress = "My addres is: \n"+ streetAddress + "\n My coordinates are :" + coordinates+" ";
-
-
-
-
-        } else {
-             myadress = "";
-        }
-
-
-        String prewrittenmessage =smessage+ myadress;
-        String phone = sphonenumber;
-        Intent sendtoemail = new Intent(Intent.ACTION_SEND);
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
-          }
-    }
 
 
     private boolean isEmpty(EditText editText){

@@ -10,7 +10,7 @@
         android:ems="10"
         android:id="@+id/usermessage"
         android:layout_marginTop="46dp"
-        android:text="I can&apos;t reach my phone, i may be in a dangerous situation. My latest location is below please try to reach me "
+        android:text="This is an example message, please write your own message. This is an example message, please write your own message. "
         android:layout_below="@+id/textView2"
         android:layout_alignRight="@+id/textView2"
         android:layout_alignEnd="@+id/textView2" />

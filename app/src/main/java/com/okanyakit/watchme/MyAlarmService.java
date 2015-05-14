@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,12 +15,21 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyAlarmService extends Service {
 //    static MyCountDownTime myCountDownTimer= new MyCountDownTime(60000, 20000);
+
     public static Handler handler = new Handler();
     NotificationCompat.Builder mBuilder;
     public static final int NOTIFICATION_ID = 4567;
+    String smessage;
+    String sphonenumber;
+    String myadress = "";
+    boolean alarmCreated;
 
     public MyAlarmService() {
     }
@@ -55,11 +65,26 @@ public class MyAlarmService extends Service {
         mBuilder.setWhen(System.currentTimeMillis());
         mBuilder.setContentTitle("Watch me");
         mBuilder.setContentText("Are you ok ?");
-        mBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(this,RingtoneManager.TYPE_NOTIFICATION));
+        mBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_NOTIFICATION));
         mBuilder.setContentIntent(pendingIntent);
 
         NotificationManager nManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        nManager.notify(NOTIFICATION_ID,mBuilder.build());
+        nManager.notify(NOTIFICATION_ID, mBuilder.build());
+        SharedPreferences alarmpreferences = getApplication().getSharedPreferences("Message", Context.MODE_PRIVATE);
+        alarmCreated = alarmpreferences.getBoolean("alarmCreated",true);
+        final Timer waitingTimer = new Timer();
+        waitingTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (alarmCreated == false) {
+                    waitingTimer.cancel();
+                } else {
+                    sendmessage();
+                }
+
+
+            }
+        }, 6000, 240000);
 
 
 
@@ -78,6 +103,7 @@ public class MyAlarmService extends Service {
 //        mManager.notify(1, notification);
 
         //myCountDownTimer.start();
+
 
 
 
@@ -113,6 +139,40 @@ public class MyAlarmService extends Service {
 //        handler.removeCallbacks(runnable);
 //    }
 
+    private void sendmessage() {
+        GPSTracker gps = new GPSTracker(MyAlarmService.this);
+        SharedPreferences messagepreferences = this.getApplication().getSharedPreferences("Message", Context.MODE_PRIVATE);
+        gps.getLocation();
+        smessage = messagepreferences.getString("Message",null);
+        sphonenumber = messagepreferences.getString("PhoneNumber",null);
 
 
-}
+
+            if (gps.canGetLocation()){
+                gps.getLocation();
+                String slatitude;
+                String slongitude;
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                String streetAddress = gps.getstreetAddress();
+
+                slongitude = Double.toString(longitude);
+                slatitude = Double.toString(latitude);
+                String coordinates = " "+slatitude+" , "+slongitude+" ";
+                myadress = "My addres is: \n"+ streetAddress + "\n My coordinates are :" + coordinates+" ";
+
+
+
+
+            } else {
+                myadress = "";
+            }
+
+
+            String prewrittenmessage =smessage+ myadress;
+            String phone = sphonenumber;
+            Intent sendtoemail = new Intent(Intent.ACTION_SEND);
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
+        }
+    }

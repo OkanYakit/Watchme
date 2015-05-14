@@ -28,7 +28,19 @@ public class usermessage extends android.support.v4.app.Fragment implements View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.usermessage_layout,container,false);
+        SharedPreferences messagepreferences = this.getActivity().getSharedPreferences("Message", Context.MODE_PRIVATE);
+        sUserMessage = messagepreferences.getString("Message",null);
+        sPhoneNumber = messagepreferences.getString("PhoneNumber",null);
 
+        usermessage = (EditText)rootview.findViewById(R.id.usermessage);
+        if (sUserMessage != null){
+            usermessage.setText(sUserMessage);
+        }
+        phonenumber = (EditText)rootview.findViewById(R.id.phonenumber);
+        if (sPhoneNumber != null)
+        {
+            phonenumber.setText(sPhoneNumber);
+        }
         usermessage = (EditText)rootview.findViewById(R.id.usermessage);
         phonenumber = (EditText)rootview.findViewById(R.id.phonenumber);
         savemessage = (Button)rootview.findViewById(R.id.savemessage);
@@ -37,7 +49,7 @@ public class usermessage extends android.support.v4.app.Fragment implements View
         savephonenumber.setOnClickListener(this);
         savemessage.setOnClickListener(this);
         send_message.setOnClickListener(this);
-        sUserMessage = "I can't reach my phone, i may be in a dangerous situation. My latest location is below please try to reach me ";
+        sUserMessage = "";
 
         return rootview;
     }
