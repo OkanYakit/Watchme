@@ -170,7 +170,6 @@ public class alarmsettings extends android.support.v4.app.Fragment {
 
         String prewrittenmessage =smessage+ myadress;
         String phone = sphonenumber;
-        Intent sendtoemail = new Intent(Intent.ACTION_SEND);
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
           }

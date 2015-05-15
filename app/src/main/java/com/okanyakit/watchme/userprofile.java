@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.okanyakit.watchme.activities.DispatchActivity;
+import com.parse.ParseUser;
+
 /**
  * Created by okan on 4/23/2015.
  */
@@ -19,7 +22,6 @@ public class userprofile extends android.support.v4.app.Fragment implements View
     EditText regusername, regpassword, regemail, regphonenumber, regbloodtype, regbirthday, regaddress;
     UserLocalStore userLocalStore;
     Context context;
-
 
     @Nullable
     @Override
@@ -36,26 +38,12 @@ public class userprofile extends android.support.v4.app.Fragment implements View
         logoutbutton = (Button)rootview.findViewById(R.id.logoutbutton);
         logoutbutton.setOnClickListener(this);
 
-
         displayUserDetails();
-
 
         return rootview;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        if (authenticate()== true)
-//        {
-//        displayUserDetails();
-//        }
-//        else{
-//            Intent intent = new Intent(getActivity(),loginscreen.class);
-//            startActivity(intent);
-//        }
-//    }
+
     private void displayUserDetails()
     {
         UserLocalStore userLocalStore = new UserLocalStore(getActivity());
@@ -67,22 +55,14 @@ public class userprofile extends android.support.v4.app.Fragment implements View
         regaddress.setText(storedUser.address);
     }
 
-//    private boolean authenticate()
-//    {
-//        return userLocalStore.getuserloogedin();
-//
-//    }
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.logoutbutton:
 
-                UserLocalStore userLocalStore = new UserLocalStore(getActivity());
-                userLocalStore.clearUserData();
-//                userLocalStore.setUserLoggedIn(false);
-                Intent intent = new Intent(getActivity(), loginscreen.class);
-                startActivity(intent);
+                ParseUser.getCurrentUser().logOut();
+                startActivity(new Intent(getActivity(), DispatchActivity.class));
 
                 break;
         }

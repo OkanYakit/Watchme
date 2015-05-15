@@ -13,7 +13,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name=".application.SampleApplication"
+        >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -30,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".loginscreen"
             android:label="@string/title_activity_loginscreen" >
@@ -42,6 +45,32 @@
             android:name=".slidemenu"
             android:label="@string/title_activity_slidemenu" >
         </activity>
+
+        <!-- newly added activities-->
+        <activity
+            android:name=".activities.DispatchActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name=".activities.MyActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name=".activities.SignUpOrLoginActivity"
+            android:label="" >
+        </activity>
+
+
+
+        <!-- newly added activities ends -->
 
         <receiver
             android:name=".MyReceiver"
