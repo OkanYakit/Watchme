@@ -48,6 +48,7 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+        <receiver android:name="scheduler.AlarmReceiver"></receiver>
 
         <service
             android:name=".MyAlarmService"
