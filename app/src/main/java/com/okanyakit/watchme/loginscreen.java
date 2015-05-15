@@ -1,10 +1,9 @@
 package com.okanyakit.watchme;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -26,9 +24,6 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
-import scheduler.AlarmReceiver;
-import scheduler.Scheduler;
-
 
 public class loginscreen extends ActionBarActivity implements View.OnClickListener {
 
@@ -36,6 +31,7 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
     EditText logusername, logpassword;
     TextView registerheretv;
     UserLocalStore userLocalStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +77,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("name", logusername.getText().toString());
-
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
@@ -90,21 +85,41 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
                 } else {
                     Log.d("parse.com", "Error: " + e.getMessage());
                 }
+                if (parseObjects != null) {
+                    Log.d("parse.com", "" + parseObjects.size());
+                    if (parseObjects.get(0).get("name")== logusername.getText().toString())
+                    {
+                        if (parseObjects.get(1).get("password")==logpassword.getText().toString())
+                        {
+                            showMessage("Welcome " + parseObjects.get(0).get("name"));
 
-                if(parseObjects!=null){
-                    Log.d("parse.com",""+parseObjects.size());
-                    if(parseObjects!=null&&parseObjects.size()>0){
-                        showMessage("Welcome "+parseObjects.get(0).get("name"));
-                        loguserIn(user);
-                    }else{
-                        showMessage("Please enter a valid user");
+                        }
                     }
 
-                }else{
-                    Log.d("parse.com","Houston 5");
+                } else {
+                    showErrorMessage();
+
                 }
             }
         });
+
+
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
+//                if (e == null) {
+//                    Log.d("parse.com", "Retrieved " + parseObjects.size() + " scores");
+//                } else {
+//                    Log.d("parse.com", "Error: " + e.getMessage());
+//                }
+//                if(parseObjects!=null){
+//                    Log.d("parse.com",""+parseObjects.size());
+//                    showMessage("Welcome "+parseObjects.get(0).get("name"));
+//                }else{
+//                    showMessage("Please check the user name");
+//                }
+//            }
+//        });
 
 
 //        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("User");
@@ -122,10 +137,17 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 //                }
 //            }
 //        });
+        userIsLogged();
+        startActivity(new Intent(this,slidemenu.class));
+
     }
 
-
-
+    private void userIsLogged() {
+        SharedPreferences mySharedPrefecences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myeditor = mySharedPrefecences.edit();
+        myeditor.putBoolean("UserLoggedIn",true);
+        myeditor.commit();
+    }
 
 
     public void authenticate (User user){
@@ -163,21 +185,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         NavigationDrawerFragment mNavigationDrawerFragment = new NavigationDrawerFragment();
         startActivity(new Intent(this,slidemenu.class));
 
-        startAlarm(findViewById(R.id.textView3));
-
-    }
-
-    public void startAlarm(View view) {
-
-        // Retrieve a PendingIntent that will perform a broadcast
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        Scheduler.pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-
-        Scheduler.manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
-
-        Scheduler.manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, Scheduler.pendingIntent);
-        Log.d("Nurettin","Alarm Set! 10 seconds");
     }
 
 }

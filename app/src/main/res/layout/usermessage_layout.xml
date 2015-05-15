@@ -52,4 +52,12 @@
         android:layout_alignLeft="@+id/usermessage"
         android:layout_alignStart="@+id/usermessage"
         android:hint="enter the phone number" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save the phone number"
+        android:id="@+id/savephonenumber"
+        android:layout_above="@+id/send_message"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

@@ -1,12 +1,10 @@
 package com.okanyakit.watchme;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,13 +26,12 @@ public class StopCountDownTimer extends ActionBarActivity {
         buttonStopCountDownTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                // If the alarm has been set, cancel it.
-                if (MyApplication.alarmManager!= null) {
-                    MyApplication.alarmManager.cancel(MyApplication.getAlarmIntent());
-                }
-                Log.d("Nurettin","I AM OK");
-                MyAlarmService.stopRunnable();
+                    }
+                });
             }
         });
     }

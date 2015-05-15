@@ -60,6 +60,7 @@ public class GPSTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled){
 
+
             } else {
                 this.canGetLocation = true;
                 if(isNetworkEnabled){
@@ -122,18 +123,17 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public String getstreetAddress(){
-
-        if(addresses!=null){
-            //address = addresses.get(0).getAddressLine(0);
-            city = addresses.get(0).getLocality();
-            //state = addresses.get(0).getAdminArea();
-            country = addresses.get(0).getCountryName();
-            // postalCode = addresses.get(0).getPostalCode();
-            // knownName = addresses.get(0).getFeatureName();
-            streetAddress =" "+ address+", "+city+", "+country;//+", "+state+", "+postalCode+", "+knownName;
-        }
-
+      if (addresses!=null){
+        //address = addresses.get(0).getAddressLine(0);
+        city = addresses.get(0).getLocality();
+        //state = addresses.get(0).getAdminArea();
+        country = addresses.get(0).getCountryName();
+        // postalCode = addresses.get(0).getPostalCode();
+        // knownName = addresses.get(0).getFeatureName();
+        streetAddress =" "+ address+", "+city+", "+country;//+", "+state+", "+postalCode+", "+knownName;
+         }
         return streetAddress;
+
     }
     public double getLatitude(){
         if(location != null){
@@ -156,7 +156,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
-        alertDialog.setTitle("GPS is Settings");
+        alertDialog.setTitle("GPS  Settings");
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings ?");
         alertDialog.setPositiveButton("Settings",new DialogInterface.OnClickListener() {
             @Override
