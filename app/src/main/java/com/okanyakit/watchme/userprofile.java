@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.okanyakit.watchme.Utilities.StringUtilities;
 import com.okanyakit.watchme.activities.DispatchActivity;
 import com.parse.ParseUser;
 
@@ -20,8 +21,6 @@ public class userprofile extends android.support.v4.app.Fragment implements View
     View rootview;
     Button logoutbutton;
     EditText regusername, regpassword, regemail, regphonenumber, regbloodtype, regbirthday, regaddress;
-    UserLocalStore userLocalStore;
-    Context context;
 
     @Nullable
     @Override
@@ -46,13 +45,21 @@ public class userprofile extends android.support.v4.app.Fragment implements View
 
     private void displayUserDetails()
     {
-        UserLocalStore userLocalStore = new UserLocalStore(getActivity());
-        User storedUser = userLocalStore.getLoggedInUser();
-        regusername.setText(storedUser.username);
-        regemail.setText(storedUser.email);
-        regphonenumber.setText(storedUser.phonenumber);
-        regbloodtype.setText(storedUser.bloodtype);
-        regaddress.setText(storedUser.address);
+        ParseUser user = ParseUser.getCurrentUser();
+
+        if(user!=null){
+            regusername.setText(user.getUsername());
+            regemail.setText(user.getEmail());
+            regphonenumber.setText(getString(user.get("phonenumber")));
+            regbloodtype.setText(getString(user.get("bloodtype")));
+            regaddress.setText(getString(user.get("adress")));
+        }
+
+    }
+
+    //burada kullanilirken uzun gorunmesin diye yeni methoda cekildi
+    private String getString(Object string){
+        return StringUtilities.getString(string);
     }
 
     @Override
@@ -60,10 +67,8 @@ public class userprofile extends android.support.v4.app.Fragment implements View
         switch (v.getId())
         {
             case R.id.logoutbutton:
-
                 ParseUser.getCurrentUser().logOut();
                 startActivity(new Intent(getActivity(), DispatchActivity.class));
-
                 break;
         }
     }

@@ -257,7 +257,7 @@ public class NavigationDrawerFragment extends Fragment {
         //Log out icin kullanildi.
         if (item.getItemId() == R.id.action_example) {
 
-            // User log out yap
+            //Login olmus useri log out yap
             ParseUser.getCurrentUser().logOut();
             //Dispatch i cagir
             startActivity(new Intent(getActivity(), DispatchActivity.class));

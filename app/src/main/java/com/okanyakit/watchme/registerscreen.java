@@ -20,7 +20,6 @@ public class registerscreen extends ActionBarActivity implements View.OnClickLis
 
     Button regbutton;
     EditText regusername, regpassword, regemail, regphonenumber, regbloodtype, regbirthday, regaddress, regrepassword;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

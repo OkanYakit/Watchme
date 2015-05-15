@@ -1,14 +1,11 @@
 package com.okanyakit.watchme;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import scheduler.Scheduler;
 
 /**
  * Created by okan on 4/23/2015.
@@ -19,7 +16,6 @@ public class mainscreen extends android.support.v4.app.Fragment {
     GPSTracker gps;
     TextView tshowcor, tshowstrt;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.mainscreen_layout,container,false);

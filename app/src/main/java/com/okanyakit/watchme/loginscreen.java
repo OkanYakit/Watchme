@@ -131,39 +131,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         }
     }
 
-
-    //Oncesinde sadece data check yapiyorduk simdi parse user ile gercek login olayina girdik.
-    public void parseAuthenticate(final User user){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("name", logusername.getText().toString());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
-                if (e == null) {
-                    Log.d("parse.com", "Retrieved " + parseObjects.size() + " scores");
-                } else {
-                    Log.d("parse.com", "Error: " + e.getMessage());
-                }
-                if (parseObjects != null) {
-                    Log.d("parse.com", "" + parseObjects.size());
-                    if (parseObjects.get(0).get("name")== logusername.getText().toString())
-                    {
-                        if (parseObjects.get(1).get("password")==logpassword.getText().toString())
-                        {
-                            showMessage("Welcome " + parseObjects.get(0).get("name"));
-                        }
-                    }
-                } else {
-                    showErrorMessage();
-                }
-            }
-        });
-        startActivity(new Intent(this,slidemenu.class));
-    }
-
-
-
-
     private void showErrorMessage(){
         AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(loginscreen.this);
         dialogbuilder.setMessage("Incorrect username or password");
@@ -178,10 +145,5 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         dialogbuilder.show();
     }
 
-    private void loguserIn(User returnedUser){
-        NavigationDrawerFragment mNavigationDrawerFragment = new NavigationDrawerFragment();
-        startActivity(new Intent(this,slidemenu.class));
-
-    }
 
 }
