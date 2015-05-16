@@ -11,8 +11,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
+import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +27,8 @@ public class MyAlarmService extends Service {
     String sphonenumber;
     String myadress = "";
     boolean alarmCreated;
+    Timer timer;
+    TimerTask timerTask;
 
     public MyAlarmService() {
     }
@@ -69,19 +74,7 @@ public class MyAlarmService extends Service {
 
         NotificationManager nManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         nManager.notify(NOTIFICATION_ID, mBuilder.build());
-        final Timer waitingTimer = new Timer();
-        waitingTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (alarmCreated == false) {
-                    waitingTimer.cancel();
-                } else {
-                    sendmessage();
-                }
-
-
-            }
-        }, 6000, 180000);
+        startTimer();
 
     }
 
@@ -132,5 +125,37 @@ public class MyAlarmService extends Service {
             smsManager.sendTextMessage(phone, null, prewrittenmessage, null, null);
         }
     }
+    public void initializeTimerTask() {
 
+        timerTask = new TimerTask() {
+            public void run() {
+
+                //use a handler to call another method
+                handler.post(new Runnable() {
+                    public void run() {
+                       sendmessage();
+                    }
+                });
+            }
+        };
+    }
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+        initializeTimerTask();
+
+        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
+        timer.schedule(timerTask, 5000, 10000); //
+    }
+
+    public void stoptimertask(View v) {
+            //stop the timer, if it's not already null
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+
+            }
+    }
 }

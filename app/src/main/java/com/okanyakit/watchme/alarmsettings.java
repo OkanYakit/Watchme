@@ -51,20 +51,33 @@ public class alarmsettings extends android.support.v4.app.Fragment {
         final SharedPreferences.Editor alarmEditor= alarmpreferences.edit();
 
         cancelalarm.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (alarmCreated){
 //                    alarmCreated = false;
+                    SharedPreferences alarmpreferences = getActivity().getSharedPreferences("Alarm", Context.MODE_PRIVATE);
+                    final SharedPreferences.Editor alarmEditor= alarmpreferences.edit();
                     alarmEditor.putBoolean("alarmCreated",false);
+                    alarmCreated = alarmpreferences.getBoolean("alarmCreated",false);
+
+                    try {
+                        MyAlarmService.class.getMethod("stoptimertask", View.class);
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
                 }else
                 {
                     Toast.makeText(getActivity(),"You haven't defined and alarm".toString(),Toast.LENGTH_LONG).show();
                     return;
                 }
             }
+
         });
 
         setalarm.setOnClickListener(new View.OnClickListener() {
+            SharedPreferences alarmpreferences = getActivity().getSharedPreferences("Alarm", Context.MODE_PRIVATE);
+            final SharedPreferences.Editor alarmEditor= alarmpreferences.edit();
             @Override
             public void onClick(View v) {
                 boolean validationError = false;
@@ -103,8 +116,11 @@ public class alarmsettings extends android.support.v4.app.Fragment {
 
                 AlarmManager alarmManager = (AlarmManager)getActivity(). getSystemService(ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-//                alarmCreated = true;
+//
+                SharedPreferences alarmpreferences = getActivity().getSharedPreferences("Alarm", Context.MODE_PRIVATE);
+                final SharedPreferences.Editor alarmEditor= alarmpreferences.edit();
                 alarmEditor.putBoolean("alarmCreated",true);
+                alarmCreated = alarmpreferences.getBoolean("alarmCreated",true);
             }
         });
         return rootview;

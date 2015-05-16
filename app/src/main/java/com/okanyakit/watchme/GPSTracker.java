@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -122,7 +123,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public String getstreetAddress(){
-      if (addresses!=null){
+       if (addresses!=null){
         //address = addresses.get(0).getAddressLine(0);
         city = addresses.get(0).getLocality();
         //state = addresses.get(0).getAdminArea();
@@ -130,7 +131,7 @@ public class GPSTracker extends Service implements LocationListener {
         // postalCode = addresses.get(0).getPostalCode();
         // knownName = addresses.get(0).getFeatureName();
         streetAddress =" "+ address+", "+city+", "+country;//+", "+state+", "+postalCode+", "+knownName;
-         }
+       }
         return streetAddress;
 
     }
