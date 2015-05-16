@@ -1,5 +1,6 @@
 package com.okanyakit.watchme;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.okanyakit.watchme.activities.DispatchActivity;
+import com.okanyakit.watchme.activities.MyActivity;
+import com.parse.ParseUser;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -106,6 +111,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
                         getString(R.string.title_section4),
+
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -248,8 +254,14 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
+        //Log out icin kullanildi.
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+
+            //Login olmus useri log out yap
+            ParseUser.getCurrentUser().logOut();
+            //Dispatch i cagir
+            startActivity(new Intent(getActivity(), DispatchActivity.class));
+
             return true;
         }
 

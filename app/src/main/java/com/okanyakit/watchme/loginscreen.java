@@ -1,26 +1,26 @@
 package com.okanyakit.watchme;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.okanyakit.watchme.activities.DispatchActivity;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -30,7 +30,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
     Button loginbutton;
     EditText logusername, logpassword;
     TextView registerheretv;
-    UserLocalStore userLocalStore;
 
 
     @Override
@@ -46,7 +45,6 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 
         registerheretv =(TextView) findViewById(R.id.registerheretv);
         registerheretv.setOnClickListener(this);
-        userLocalStore = new UserLocalStore(this);
 
     }
 
@@ -54,13 +52,7 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
     public void onClick(View v){
         switch (v.getId()){
             case R.id.loginbutton:
-
-                String username = logusername.getText().toString();
-                String password = logpassword.getText().toString();
-                User user = new User(username,password);
-                parseAuthenticate(user);
-//                authenticate(user);
-
+                login();
 
                 break;
 
@@ -72,97 +64,71 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
     }
 
 
-    public void parseAuthenticate(final User user){
 
+    private void login(){
+        String username = logusername.getText().toString();
+        String password = logpassword.getText().toString();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("name", logusername.getText().toString());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        // Validate the log in data
+        boolean validationError = false;
+
+        StringBuilder validationErrorMessage =
+                new StringBuilder(getResources().getString(R.string.error_intro));
+        new StringBuilder(getResources().getString(R.string.error_intro));
+
+        if (isEmpty(logusername)) {
+            validationError = true;
+            validationErrorMessage.append(getResources().getString(R.string.error_blank_username));
+        }
+        if (isEmpty(logusername)) {
+            if (validationError) {
+                validationErrorMessage.append(getResources().getString(R.string.error_join));
+            }
+            validationError = true;
+            validationErrorMessage.append(getResources().getString(R.string.error_blank_password));
+        }
+        validationErrorMessage.append(getResources().getString(R.string.error_end));
+
+        // If there is a validation error, display the error
+        if (validationError) {
+            Toast.makeText(loginscreen.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+
+        // Set up a progress dialog
+        final ProgressDialog dlg = new ProgressDialog(loginscreen.this);
+        dlg.setTitle("Please wait.");
+        dlg.setMessage("Logging in.  Please wait.");
+        dlg.show();
+
+        // Call the Parse login method
+        ParseUser.logInInBackground(logusername.getText().toString(), logpassword.getText()
+                .toString(), new LogInCallback() {
+
             @Override
-            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
-                if (e == null) {
-                    Log.d("parse.com", "Retrieved " + parseObjects.size() + " scores");
+            public void done(ParseUser user, ParseException e) {
+                dlg.dismiss();
+                if (e != null) {
+                    // Show the error message
+                    Toast.makeText(loginscreen.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 } else {
-                    Log.d("parse.com", "Error: " + e.getMessage());
-                }
-                if (parseObjects != null) {
-                    Log.d("parse.com", "" + parseObjects.size());
-                    if (parseObjects.get(0).get("name")== logusername.getText().toString())
-                    {
-                        if (parseObjects.get(1).get("password")==logpassword.getText().toString())
-                        {
-                            showMessage("Welcome " + parseObjects.get(0).get("name"));
-
-                        }
-                    }
-
-                } else {
-                    showErrorMessage();
-
+                    // Start an intent for the dispatch activity
+                    Intent intent = new Intent(loginscreen.this, DispatchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
             }
         });
 
-
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
-//                if (e == null) {
-//                    Log.d("parse.com", "Retrieved " + parseObjects.size() + " scores");
-//                } else {
-//                    Log.d("parse.com", "Error: " + e.getMessage());
-//                }
-//                if(parseObjects!=null){
-//                    Log.d("parse.com",""+parseObjects.size());
-//                    showMessage("Welcome "+parseObjects.get(0).get("name"));
-//                }else{
-//                    showMessage("Please check the user name");
-//                }
-//            }
-//        });
-
-
-//        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("User");
-//        query2.getInBackground("roRQubUf8t", new GetCallback<ParseObject>() {
-//
-//            @Override
-//            public void done(ParseObject parseObject, com.parse.ParseException e) {
-//                if (parseObject!=null) {
-//                    Log.d("parse.com",parseObject.getString("name"));
-//                    // object will be your game score
-//                    loguserIn(user);
-//                } else {
-//                    Log.d("parse.com","Houston");
-//                    showErrorMessage();
-//                }
-//            }
-//        });
-        userIsLogged();
-        startActivity(new Intent(this,slidemenu.class));
-
     }
 
-    private void userIsLogged() {
-        SharedPreferences mySharedPrefecences = getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        SharedPreferences.Editor myeditor = mySharedPrefecences.edit();
-        myeditor.putBoolean("UserLoggedIn",true);
-        myeditor.commit();
-    }
-
-
-    public void authenticate (User user){
-        ServerRequest serverRequest = new ServerRequest(this);
-        serverRequest.fetchUserDataInBackground(user, new GetUserCallBack() {
-            @Override
-            public void done(User returnedUser) {
-                if (returnedUser == null) {
-                    showErrorMessage();
-                } else {
-                    loguserIn(returnedUser);
-                }
-            }
-        });
-
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void showErrorMessage(){
@@ -179,12 +145,5 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         dialogbuilder.show();
     }
 
-    private void loguserIn(User returnedUser){
-
-        userLocalStore.storeUserData(returnedUser);
-        NavigationDrawerFragment mNavigationDrawerFragment = new NavigationDrawerFragment();
-        startActivity(new Intent(this,slidemenu.class));
-
-    }
 
 }

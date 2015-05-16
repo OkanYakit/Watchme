@@ -9,15 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.okanyakit.watchme.activities.DispatchActivity;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class registerscreen extends ActionBarActivity implements View.OnClickListener {
 
     Button regbutton;
     EditText regusername, regpassword, regemail, regphonenumber, regbloodtype, regbirthday, regaddress, regrepassword;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +45,21 @@ public class registerscreen extends ActionBarActivity implements View.OnClickLis
         switch (v.getId()){
             case R.id.regbutton:
                 boolean validationError = false;
-                StringBuilder validationErrorMessage = new StringBuilder("Please ");
+                StringBuilder validationErrorMessage =
+                        new StringBuilder(getResources().getString(R.string.error_intro));
+
                 if (isEmpty(regusername))
                 {
                     validationError = true;
-                    validationErrorMessage.append("enter a username ");
+                    validationErrorMessage.append(getResources().getString(R.string.error_blank_username));
                 }
                 if (isEmpty(regpassword))
                 {
                     if (validationError){
-                        validationErrorMessage.append("and ");
+                        validationErrorMessage.append(getResources().getString(R.string.error_join));
                     }
                     validationError =true;
-                    validationErrorMessage.append("enter a password ");
+                    validationErrorMessage.append(getResources().getString(R.string.error_blank_password));
                 }
                 if (!isMatching(regpassword,regrepassword)){
                     if (validationError){
@@ -71,10 +75,13 @@ public class registerscreen extends ActionBarActivity implements View.OnClickLis
                     return;
                 }
 
+                // Set up a progress dialog
                 final ProgressDialog dlg = new ProgressDialog(registerscreen.this);
                 dlg.setTitle("Please Wait");
                 dlg.setMessage("Signing up, Please wait...");
                 dlg.show();
+
+
                 String username = regusername.getText().toString();
                 String password = regpassword.getText().toString();
                 String email = regemail.getText().toString();
@@ -84,33 +91,37 @@ public class registerscreen extends ActionBarActivity implements View.OnClickLis
                 String address = regaddress.getText().toString();
 
 
-                ParseObject userObject = new ParseObject("User");
-                userObject.put("name",username);
-                userObject.put("password",password);
-                userObject.put("email",email);
-                userObject.put("phonenumber",phonenumber);
-                userObject.put("bloodtype",bloodtype);
-                userObject.put("birthday",birthday);
-                userObject.put("adress",address);
+                // Set up a new Parse user
+                ParseUser user = new ParseUser();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setEmail(email);
+                user.put("phonenumber",phonenumber);
+                user.put("bloodtype",bloodtype);
+                user.put("birthday",birthday);
+                user.put("adress",address);
 
-                userObject.saveInBackground();
-                dlg.dismiss();
-                startActivity(new Intent(registerscreen.this, loginscreen.class));
+                // Call the Parse signup method
+                user.signUpInBackground(new SignUpCallback() {
+
+                    @Override
+                    public void done(ParseException e) {
+                        dlg.dismiss();
+                        if (e != null) {
+                            // Show the error message
+                            Toast.makeText(registerscreen.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        } else {
+                            // Start an intent for the dispatch activity
+                            Intent intent = new Intent(registerscreen.this, DispatchActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                });
 
                 break;
         }
     }
-
-     private void registerUser(User user){
-         ServerRequest serverRequest = new ServerRequest(this);
-         serverRequest.storeUserDataInBackground(user, new GetUserCallBack() {
-             @Override
-             public void done(User returnedUser) {
-                 startActivity(new Intent(registerscreen.this, loginscreen.class));
-             }
-         });
-     }
-
 
     private boolean isEmpty(EditText editText){
         if (editText.getText().toString().trim().length() > 0){
