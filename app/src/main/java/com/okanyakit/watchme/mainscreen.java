@@ -1,5 +1,7 @@
 package com.okanyakit.watchme;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +65,11 @@ public class mainscreen extends android.support.v4.app.Fragment {
                     String coordinates = " "+slatitude+" , "+slongitude+" ";
                     tshowcor.setText(coordinates);
                     tshowstrt.setText(streetAddress);
-
+                    SharedPreferences addresstercih = getActivity().getSharedPreferences("Addressinfo", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor addresstercihedit = addresstercih.edit();
+                    addresstercihedit.putString("coordinates",coordinates);
+                    addresstercihedit.putString("streetAddress",streetAddress);
+                    addresstercihedit.commit();
 
 
                 } else {
