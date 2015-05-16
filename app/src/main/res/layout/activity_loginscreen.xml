@@ -52,12 +52,25 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="Login"
         android:id="@+id/loginbutton"
         android:layout_above="@+id/registerheretv"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="39dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:clickable="true"
+        android:background="@drawable/twitter_button"
+        android:id="@+id/loginWithTwitter"
+        android:layout_above="@+id/registerheretv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="39dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +81,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="37dp"
         android:textColor="#ff3698d3"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:textStyle="bold" />
 
 </RelativeLayout>

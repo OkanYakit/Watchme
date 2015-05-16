@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
 public class loginscreen extends ActionBarActivity implements View.OnClickListener {
 
     Button loginbutton;
+    ImageButton twitterLogin;
     EditText logusername, logpassword;
     TextView registerheretv;
 
@@ -46,6 +49,9 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
         registerheretv =(TextView) findViewById(R.id.registerheretv);
         registerheretv.setOnClickListener(this);
 
+        twitterLogin = (ImageButton) findViewById(R.id.loginWithTwitter);
+        twitterLogin.setOnClickListener(this);
+
     }
 
     @Override
@@ -60,12 +66,33 @@ public class loginscreen extends ActionBarActivity implements View.OnClickListen
 
                 startActivity(new Intent(this,registerscreen.class));
                 break;
+            case R.id.loginWithTwitter:
+                loginWithTwitter();
+                break;
         }
     }
 
 
+    private void loginWithTwitter(){
+        Toast.makeText(loginscreen.this, "Hello Twitter!", Toast.LENGTH_LONG)
+                .show();
 
-    private void login(){
+        ParseTwitterUtils.logIn(loginscreen.this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Twitter login.");
+                } else if (user.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Twitter!");
+                } else {
+                    Log.d("MyApp", "User logged in through Twitter!");
+                }
+            }
+        });
+    }
+
+
+        private void login(){
         String username = logusername.getText().toString();
         String password = logpassword.getText().toString();
 

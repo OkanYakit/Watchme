@@ -25,6 +25,11 @@
     <string name="parse_app_id">QiI6aqefjuA1w3XiGNGkCbP76QRXLb3prLcp3rRV</string>
     <string name="parse_client_id">9MEp10PetibByuBs6tcfkrZn3eHpbsAzz6RbfRLb</string>
 
+    <string name="twitter_consumer_key">lQKTknge2uoY3GRAQGEQIvW3s</string>
+    <string name="twitter_secret">C8KVxtfEVjmnzzHajBf2Kh11bmsZeKSm8Kf5Hfi1aWp1yGR3vU</string>
+
+
+
     <!-- Newly added Keys -->
     <string name="title_activity_sign_up_or_log_in">SignUpOrLogInActivity</string>
     <string name="log_in">Log in</string>
